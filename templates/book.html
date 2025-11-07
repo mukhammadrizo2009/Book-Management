@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitoblar Ro'yxati - Kitoblar Boshqaruvi</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .book-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            height: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .book-cover {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+        
+        .book-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+        
+        .book-author {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .book-year {
+            color: #95a5a6;
+        }
+        
+        .book-status {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .status-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-borrowed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        
+        .pagination {
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header text-center">
+            <h1><i class="fas fa-book-open me-2"></i>Kitoblar Ro'yxati</h1>
+            <p class="lead mb-0">Kutubxonangizdagi barcha kitoblar</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="d-flex justify-content-between mb-4">
+            <a href="{% url 'books:home_page' %}" class="btn btn-outline-primary">
+                <i class="fas fa-home me-2"></i>Bosh Sahifa
+            </a>
+            <a href="{% url 'books:add_book' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Yangi Kitob Qo'shish
+            </a>
+        </nav>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ total_books }}</div>
+                    <div>Jami Kitoblar</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ available_books }}</div>
+                    <div>Mavjud Kitoblar</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ borrowed_books }}</div>
+                    <div>Olingan Kitoblar</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ authors_count }}</div>
+                    <div>Mualliflar</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="filters">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="search-box">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Kitob nomi, muallifi yoki janri bo'yicha qidirish...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex gap-2">
+                        <select class="form-select">
+                            <option value="">Barcha janrlar</option>
+                            <option value="fiction">Badiiy adabiyot</option>
+                            <option value="non-fiction">Ilmiy adabiyot</option>
+                            <option value="biography">Tarjimai hol</option>
+                            <option value="science">Fan</option>
+                            <option value="history">Tarix</option>
+                        </select>
+                        <select class="form-select">
+                            <option value="">Barcha holatlar</option>
+                            <option value="available">Mavjud</option>
+                            <option value="borrowed">Olingan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books List -->
+        {% if books %}
+        <div class="row">
+            {% for book in books %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="book-title">{{ book.name }}</h5>
+                        <p class="book-author">{{ book.author }}</p>
+                        
+                        <div class="book-meta">
+                            <span class="book-year">{{ book.publication_year }} yil</span>
+                            <span class="book-status {% if book.status == 'available' %}status-available{% else %}status-borrowed{% endif %}">
+                                {% if book.status == 'available' %}Mavjud{% else %}Olingan{% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="actions">
+                            <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye me-1"></i>Ko'rish
+                            </a>
+                            <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-edit me-1"></i>Tahrirlash
+                            </a>
+                            <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash me-1"></i>O'chirish
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <h3>Hozircha hech qanday kitob mavjud emas</h3>
+            <p class="mb-4">Kutubxonangizni boyitish uchun birinchi kitobingizni qo'shing</p>
+            <a href="{% url 'books:add_book' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Birinchi Kitobni Qo'shish
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Simple search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('input[type="text"]');
+            const bookCards = document.querySelectorAll('.book-card');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                bookCards.forEach(card => {
+                    const title = card.querySelector('.book-title').textContent.toLowerCase();
+                    const author = card.querySelector('.book-author').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                        card.parentElement.style.display = 'block';
+                    } else {
+                        card.parentElement.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Filter by status
+            const statusFilter = document.querySelectorAll('select')[1];
+            statusFilter.addEventListener('change', function() {
+                const status = this.value;
+                
+                bookCards.forEach(card => {
+                    const bookStatus = card.querySelector('.book-status').textContent.toLowerCase();
+                    
+                    if (status === '' || 
+                        (status === 'available' && bookStatus.includes('mavjud')) ||
+                        (status === 'borrowed' && bookStatus.includes('olingan'))) {
+                        card.parentElement.style.display = 'block';
+                    } else {
+                        card.parentElement.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

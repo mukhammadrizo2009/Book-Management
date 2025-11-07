@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitoblar Boshqaruvi</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'books:home_page' %}">
+                <i class="fas fa-book me-2"></i>Kitoblar Boshqaruvi
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'books:home_page' %}">Bosh Sahifa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:books_page' %}">Kitoblar Ro'yxati</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Kitob Qo'shish</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Mualliflar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Loyiha Haqida</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Kitoblar Olamiga Xush Kelibsiz</h1>
+            <p class="lead mb-4">Kitoblaringizni boshqarishning eng zamonaviy va qulay usuli</p>
+            <a href="{% url 'books:books_page' %}" class="btn btn-light btn-lg me-2">
+                <i class="fas fa-book me-2"></i>Kitoblarimni Ko'rish
+            </a>
+            <a href="#" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-plus me-2"></i>Yangi Kitob Qo'shish
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container mb-5">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h2 class="fw-bold">Nima Uchun Bizni Tanlaysiz?</h2>
+                <p class="text-muted">Kitoblaringizni boshqarishda bizning platformamiz sizga quyidagi imkoniyatlarni taqdim etadi</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Tez Qidiruv</h4>
+                    <p class="text-muted">Kitoblaringizni nomi, muallifi yoki janri bo'yicha tezda toping. Kengaytirilgan qidiruv imkoniyatlari bilan.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>Statistika</h4>
+                    <p class="text-muted">Kitoblar to'plamingiz haqida batafsil statistika. O'qigan, o'qiyotgan va rejalashtirilgan kitoblar statistikasi.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>Mobil Moslashuvchan</h4>
+                    <p class="text-muted">Har qanday qurilmada ishlaydigan moslashuvchan dizayn. Telefoningizdan ham kitoblaringizni boshqaring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row text-center mb-4">
+                <div class="col">
+                    <h2 class="fw-bold">Kitoblar Statistikasi</h2>
+                    <p class="text-muted">Sizning kitoblar to'plamingiz haqida statistik ma'lumotlar</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">127</div>
+                        <p>Jami Kitoblar</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">42</div>
+                        <p>O'qilgan Kitoblar</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <p>Hozirda O'qilayotgan</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">23</div>
+                        <p>Mualliflar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Books Section -->
+    <section class="container my-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold">So'ngi Qo'shilgan Kitoblar</h2>
+                <p class="text-muted">Yaqinda to'plamingizga qo'shgan kitoblaringiz</p>
+            </div>
+            <div class="col-auto">
+                <a href="{% url 'books:books_page' %}" class="btn btn-outline-primary">Barchasini Ko'rish</a>
+            </div>
+        </div>
+        <div class="row g-4">
+            <!-- Book 1 -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Sariq Devni Minib</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Xudoyberdi To'xtaboyev</h6>
+                        <p class="card-text">O'zbek bolalar adabiyotining eng yaxshi namunalaridan biri. Kitob o'quvchilarni hayoliy sarguzashtlarga olib chiqadi.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-primary">Bolalar</span>
+                            <small class="text-muted">2023 yil</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 2 -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Otamdan Qolgan Dalalar</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Tog'ay Murod</h6>
+                        <p class="card-text">O'zbek xalqining urush yillari va undan keyingi hayoti haqida chuqur falsafiy asar. Asar insoniy qadriyatlar haqida.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-success">Roman</span>
+                            <small class="text-muted">1994 yil</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 3 -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Kecha va Kunduz</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Abdulla Qodiriy</h6>
+                        <p class="card-text">O'zbek adabiyotining durdona asari. Asar XX asr boshlarida O'zbekistonning ijtimoiy hayotini aks ettiradi.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-warning">Tarixiy</span>
+                            <small class="text-muted">1936 yil</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Kitoblar Boshqaruvi</h5>
+                    <p>Kitoblaringizni boshqarishning eng zamonaviy va qulay platformasi. Har qanday vaqtda, har qanday joyda kitoblaringizga kirish imkoniyati.</p>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5>Havolalar</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'books:home_page' %}" class="text-white">Bosh Sahifa</a></li>
+                        <li><a href="{% url 'books:books_page' %}" class="text-white">Kitoblar</a></li>
+                        <li><a href="#" class="text-white">Mualliflar</a></li>
+                        <li><a href="#" class="text-white">Loyiha Haqida</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>Aloqa</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i> info@kitoblar.uz</li>
+                        <li><i class="fas fa-phone me-2"></i> +998 90 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Toshkent sh., Yunusobod t.</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Ijtimoiy Tarmoqlar</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fab fa-telegram fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p>&copy; 2023 Kitoblar Boshqaruvi. Barcha huquqlar himoyalangan.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Maxfiylik Siyosati</a>
+                    <a href="#" class="text-white">Foydalanish Shartlari</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
